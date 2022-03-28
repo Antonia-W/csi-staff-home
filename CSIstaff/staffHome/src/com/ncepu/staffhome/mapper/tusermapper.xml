@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncepu.staffhome.mapper.TuserMapper">
+    <!--id值就是方法名-->
+
+    <select id="login" resultType="User">
+        select * from user where uname=#{0} and pwd=#{1}
+    </select>
+
+    <select id="getAllUser" resultType="User">
+        select * from user where state!=""
+    </select>
+
+    <select id="getSUser" resultType="User">
+        select * from user
+        <where>
+            <if test="uname != null and uname !=''">
+                and uname like "%"#{uname}"%"
+            </if>
+            <if test="state!=0">
+                and state=#{state}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBackUser" resultType="User">
+        select * from user where uname=#{uname}
+    </select>
+
+    <update id="updateUser" parameterType="User">
+        update user set name=#{name},state=#{state} where uname=#{uname}
+    </update>
+
+    <delete id="delUser">
+        delete from user where uname=#{uname}
+    </delete>
+
+    <update id="upDataFaceUrlByName">
+        update user set faceurl=#{1},facepath=#{2} WHERE uname=#{0}
+  </update>
+
+    <select id="selectFaceKye" resultType="Facekey">
+         SELECT * FROM facekey
+    </select>
+
+    <insert id="addUser" parameterType="User">
+        insert  into user (name,state,uname,pwd,ucretime) values(#{name},#{state},#{uname},#{pwd},now())
+    </insert>
+
+    <update id="editPwd" parameterType="User">
+        update user set pwd=#{pwd} where uname=#{uname}
+    </update>
+
+    <!--    <resultMap id="userMap" type="User">
+        <id property="uname" column="uname"></id>
+        <result column="name" property="name"></result>
+        <result column="pwd" property="pwd"></result>
+        <result column="state" property="state"></result>
+        <result column="ucretime" property="ucretime"></result>
+        <result column="sex" property="sex"></result>
+        <result column="nation" property="nation"></result>
+        <result column="tel" property="tel"></result>
+        <result column="mobie" property="mobie"></result>
+        <result column="email" property="email"></result>
+        <result column="edubg" property="edubg"></result>
+        <result column="idnum" property="idnum"></result>
+        <result column="address" property="address"></result>
+        <result column="stafftime" property="stafftime"></result>
+        <result column="polista" property="polista"></result>
+        <result column="postcode" property="postcode"></result>
+        <result column="major" property="major"></result>
+        <result column="hobie" property="hobie"></result>
+        <result column="ps" property="ps"></result>
+        <result column="qqnum" property="qqnum"></result>
+        <result column="birthday" property="birthday"></result>
+        <association property="pid" javaType="Posts">
+            <id property="pid" column="pid"></id>
+            <result property="poname" column="poname"></result>
+            <result property="podetial" column="podetial"></result>
+        </association>
+        <association property="did" javaType="Department">
+            <id property="did" column="did"></id>
+            <result property="dename" column="dename"></result>
+            <result property="dedetail" column="dedetail"></result>
+        </association>
+    </resultMap>
+
+    <select id="getAllStaff" resultMap="userMap">
+        select u.nation,u.uname,u.mobie,u.name,u.sex,u.email,u.edubg,u.idnum,u.address,u.birthday,u.ucretime,p.pid,p.poname,d.did,d.dename from department d , user u , posts p where d.did=u.did and p.pid=u.pid
+    </select>
+
+    <select id="getBackStaff" resultMap="userMap">
+        select u.*,p.pid,p.poname,d.did,d.dename from department d , user u , posts p where u.uname =#{uname} and d.did=u.did and p.pid=u.pid
+    </select>
+
+    <select id="getSelStaff" resultMap="userMap">
+        select u.*,p.pid,p.poname,d.did,d.dename from user u
+        join department d on u.did = d.did
+        join posts p on u.pid = p.pid
+        <where>
+            <if test="pid != 0">
+                and u.pid =#{pid}
+            </if>
+            <if test="name != null and name !=''">
+                and u.name=#{name}
+            </if>
+            <if test="idnum!= null and idnum !=''">
+                and u.idnum=#{idnum}
+            </if>
+            <if test="sex!= null and sex !=''">
+                and u.sex=#{sex}
+            </if>
+            <if test="mobie != null and mobie !=''">
+                and u.mobie=#{mobie}
+            </if>
+            <if test="did !=0">
+                and u.did =#{did}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delStaff">
+        delete from user where uname=#{uname}
+    </delete>
+
+    <select id="getPoName" resultType="Posts">
+        select distinct pid ,poname from posts
+    </select>
+
+    <select id="getDeName" resultType="Department">
+        select distinct did,dename from department
+    </select>-->
+</mapper>

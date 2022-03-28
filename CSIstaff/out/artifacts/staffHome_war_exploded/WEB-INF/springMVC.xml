@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--因为controller层扮演的是控制器的角色，所以需要扫描此层的类-->
+    <context:component-scan
+            base-package="com.ncepu.staffhome.controller" />
+    <!-- 上传解析器 -->
+    <bean
+            class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+            id="multipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes -->
+        <property value="1000000000" name="maxUploadSize" />
+    </bean>
+    <!-- 异常处理解析器 -->
+    <bean
+            class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!-- pro的key表示的是异常的类型，值表示的是发生了那些异常需要跳转的页面 -->
+                <prop key="java.lang.Throwable">error.jsp</prop>
+                <prop key="org.springframework.dao.DuplicateKeyException">InsertUserError.jsp</prop>
+                <prop key="org.springframework.dao.DataIntegrityViolationException">DeleteError.jsp</prop>
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">maxUploadSize.jsp</prop>
+            </props>
+        </property>
+    </bean>
+    <!--视图解析器的配置-->
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/"/>
+        <!--<property name="suffix" value=".jsp"/>-->
+    </bean>
+</beans>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="jdbcTypeForNull" value="NULL"/>
+    </settings>
+    <typeAliases>
+        <package name="com.ncepu.staffhome.entity"></package>
+    </typeAliases>
+    <!-- 完成控件导入的配置（拦截操作） -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库 -->
+            <property name="dialect" value="mysql" />
+        </plugin>
+    </plugins>
+    <!--每添加一个mapper.xml文件就需要在此添加配置-->
+    <mappers>
+        <mapper resource="com/ncepu/staffhome/mapper/tusermapper.xml"></mapper>
+        <mapper resource="com/ncepu/staffhome/mapper/tdeptmapper.xml"></mapper>
+        <mapper resource="com/ncepu/staffhome/mapper/tpostmapper.xml"></mapper>
+        <mapper resource="com/ncepu/staffhome/mapper/tnotimapper.xml"></mapper>
+        <mapper resource="com/ncepu/staffhome/mapper/tdocumapper.xml"></mapper>
+        <mapper resource="com/ncepu/staffhome/mapper/tempmapper.xml"></mapper>
+        <mapper resource="com/ncepu/staffhome/mapper/testmapper.xml"></mapper>
+    </mappers>
+</configuration>

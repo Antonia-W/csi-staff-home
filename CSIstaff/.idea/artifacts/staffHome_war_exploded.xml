@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="staffHome:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/staffHome_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="staffHome/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="staffHome" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="aip-java-sdk-4.3.2" />
+          <element id="library" level="project" name="jsqlparser-0.9.4" />
+          <element id="library" level="project" name="pagehelper-4.1.4" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

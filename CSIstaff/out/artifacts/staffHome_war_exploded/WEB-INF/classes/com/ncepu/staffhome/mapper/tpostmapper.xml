@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncepu.staffhome.mapper.TpostMapper">
+    <!--id值就是方法名-->
+    <select id="getAllPost" resultType="Posts">
+        select * from posts
+    </select>
+    <select id="getSelPost" resultType="Posts">
+        select * from posts where poname like "%"#{poname}"%"
+    </select>
+    <select id="getBackPost" resultType="Posts">
+        select * from posts where pid=#{pid}
+    </select>
+    <update id="updatePo" parameterType="Posts">
+        update posts set poname=#{poname},podetial=#{podetial} where pid=#{pid}
+    </update>
+    <delete id="delPo">
+        delete from posts where pid=#{pid}
+    </delete>
+    <insert id="addPo" parameterType="Posts" useGeneratedKeys="true" keyColumn="pid" keyProperty="pid">
+        insert into posts (poname, podetial) values (#{poname},#{podetial})
+    </insert>
+</mapper>

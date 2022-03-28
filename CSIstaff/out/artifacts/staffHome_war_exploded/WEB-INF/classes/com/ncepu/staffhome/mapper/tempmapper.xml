@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncepu.staffhome.mapper.TempMapper">
+    <!--id值就是方法名-->
+    <resultMap id="userMap" type="User">
+        <id property="uname" column="uname"></id>
+        <result column="name" property="name"></result>
+        <result column="pwd" property="pwd"></result>
+        <result column="state" property="state"></result>
+        <result column="ucretime" property="ucretime"></result>
+        <result column="sex" property="sex"></result>
+        <result column="nation" property="nation"></result>
+        <result column="tel" property="tel"></result>
+        <result column="mobie" property="mobie"></result>
+        <result column="email" property="email"></result>
+        <result column="edubg" property="edubg"></result>
+        <result column="idnum" property="idnum"></result>
+        <result column="address" property="address"></result>
+        <result column="stafftime" property="stafftime"></result>
+        <result column="polista" property="polista"></result>
+        <result column="postcode" property="postcode"></result>
+        <result column="major" property="major"></result>
+        <result column="hobie" property="hobie"></result>
+        <result column="ps" property="ps"></result>
+        <result column="qqnum" property="qqnum"></result>
+        <result column="birthday" property="birthday"></result>
+        <result property="deid" column="did"></result>
+        <result property="poid" column="pid"></result>
+        <association property="pid" javaType="Posts">
+            <id property="pid" column="pid"></id>
+            <result property="poname" column="poname"></result>
+            <result property="podetial" column="podetial"></result>
+        </association>
+        <association property="did" javaType="Department">
+            <id property="did" column="did"></id>
+            <result property="dename" column="dename"></result>
+            <result property="dedetail" column="dedetail"></result>
+        </association>
+    </resultMap>
+
+    <select id="getAllStaff" resultMap="userMap">
+        select u.nation,u.uname,u.mobie,u.name,u.sex,u.email,u.edubg,u.idnum,u.address,u.birthday,u.ucretime,p.pid,p.poname,d.did,d.dename from department d , user u , posts p where d.did=u.did and p.pid=u.pid
+    </select>
+
+    <select id="getBackStaff" resultMap="userMap">
+        select u.*,p.pid,p.poname,d.did,d.dename from department d , user u , posts p where u.uname =#{uname} and d.did=u.did and p.pid=u.pid
+    </select>
+
+    <select id="getSelStaff" resultMap="userMap">
+        select u.*,p.pid,p.poname,d.did,d.dename from user u
+        join department d on u.did = d.did
+        join posts p on u.pid = p.pid
+        <where>
+            <if test="pid != 0">
+                and u.pid =#{pid}
+            </if>
+            <if test="name != null and name !=''">
+                and u.name=#{name}
+            </if>
+            <if test="idnum!= null and idnum !=''">
+                and u.idnum=#{idnum}
+            </if>
+            <if test="sex!= null and sex !=''">
+                and u.sex=#{sex}
+            </if>
+            <if test="mobie != null and mobie !=''">
+                and u.mobie=#{mobie}
+            </if>
+            <if test="did !=0">
+                and u.did =#{did}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delStaff">
+        delete from user where uname=#{uname}
+    </delete>
+
+    <select id="getPoName" resultType="Posts">
+        select distinct pid ,poname from posts
+    </select>
+
+    <select id="getDeName" resultType="Department">
+        select distinct did,dename from department
+    </select>
+
+    <update id="updateStaff" parameterType="User">
+        update user set name=#{name},idnum=#{idnum},sex=#{sex},pid=#{poid},edubg=#{edubg},email=#{email},mobie=#{mobie},tel=#{tel},polista=#{polista},  qqnum=#{qqnum},address=#{address},postcode=#{postcode},birthday=#{birthday},nation=#{nation},  major=#{major},hobie=#{hobie},ps=#{ps},did=#{deid} where uname=#{uname}
+    </update>
+
+    <insert id="addStaff" parameterType="User" >
+        insert into user(uname,name,idnum,sex,pid,edubg,email,mobie,tel,polista,qqnum,address, postcode,birthday,nation,major,hobie,ps,did,ucretime) values  (#{uname},#{name},#{idnum},#{sex},#{poid}, #{edubg},#{email},#{mobie},#{tel},#{polista},#{qqnum},#{address},#{postcode},#{birthday},#{nation},#{major},#{hobie},#{ps},#{deid},now())
+    </insert>
+</mapper>

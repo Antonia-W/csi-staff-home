@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncepu.staffhome.mapper.TnotiMapper">
+    <!--id值就是方法名-->
+    <resultMap id="notMap" type="Notice">
+        <id property="notid" column="notid"></id>
+        <result property="notname" column="notname"></result>
+        <result property="content" column="content"></result>
+        <result property="nottime" column="nottime"></result>
+        <association property="uname" javaType="User">
+            <id property="uname" column="uname"></id>
+            <result property="name" column="name"></result>
+        </association>
+    </resultMap>
+
+    <select id="getAllNoti" resultMap="notMap">
+        select n.*,u.uname,u.name from user u , notice n where n.uname=u.uname
+    </select>
+
+    <select id="getBackNoti" resultMap="notMap">
+        select n.*,u.uname,u.name from notice n,user u where u.uname=n.uname and n.notid=#{notid}
+    </select>
+    <update id="updateNoti" parameterType="Notice">
+        update notice set notname=#{notname},content=#{content},nottime=now() where notid=#{notid}
+    </update>
+    <select id="preNoti" resultType="Notice">
+           select * from notice where notid = #{notid}
+       </select>
+    <select id="getSelNoti" resultMap="notMap">
+    select u.name,n.uname,n.notname,n.content,n.nottime from notice n,user u
+    <where>
+        and n.uname = u.uname
+        <if test="notname != null and notname != ''">
+            and n.notname like "%"#{notname}"%"
+        </if>
+        <if test="content != null and content != ''">
+            and n.content like "%"#{content}"%"
+        </if>
+    </where>
+    </select>
+    <delete id="delNoti" >
+        delete from notice where notid=#{notid}
+    </delete>
+    <insert id="addNoti" parameterType="Notice" useGeneratedKeys="true" keyProperty="notid" keyColumn="notid">
+        insert into notice(notname,content,nottime,uname) values (#{notname},#{content},now(),#{cuname})
+    </insert>
+
+</mapper>

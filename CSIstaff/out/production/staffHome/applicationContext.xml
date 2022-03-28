@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                     http://www.springframework.org/schema/context
+                     http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                     http://www.springframework.org/schema/aop
+                     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                     http://www.springframework.org/schema/tx
+                     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+    <!--添加需要扫描注解的包-->
+    <!--注解配置-->
+    <context:annotation-config />
+    <!--service接口扫描-->
+    <context:component-scan
+            base-package="com.ncepu.staffhome.service" />
+    <!--service实现类的扫描-->
+    <context:component-scan base-package="com.ncepu.staffhome.service.serviceImpl"/>
+    <!--配置数据源-->
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName"
+                  value="com.mysql.cj.jdbc.Driver" />
+        <property name="url"
+                  value="jdbc:mysql://127.0.0.1:3306/staffdb?serverTimezone=UTC&amp;useSSL=false" />
+        <property name="username" value="root" />
+        <property name="password" value="NCEPUwqq0920_" />
+    </bean>
+
+    <!--因为我们需要使用事务，所以添加事务的配置,将事务与数据源进行关联-->
+    <bean id="txManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!--事务的注解配置-->
+    <tx:annotation-driven
+            transaction-manager="txManager" />
+    <!--当spring没有整合mybatis的时候，在baseDao中完成打开事务，提交事务等等操作，这些操作离不开
+   sqlSessionFactory,此类关联了mybatis.xml文件-->
+    <!--整合后就由spring容器来创建sqlSessionFactory-->
+    <bean id="sqlSessionFactory"
+          class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--关联mybatis.xml文件-->
+        <property name="configLocation" value="classpath:mybatis.xml" />
+        <!--关联数据源-->
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- 整合前通过sqlSessionFactory得到sqlSession对象，然后由sqlSession对象得到mapper对象-->
+    <!--整合后由spring容器创建baseMapper对象，此对象关联sqlSessionFactory,不需要再创建sqlSession对象，只需要
+    将自定义的mapper接口与baseMapper进行关联即可-->
+    <bean id="baseMapper"
+          class="org.mybatis.spring.mapper.MapperFactoryBean" abstract="true"
+          lazy-init="true">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    <!--每添加一个mapper接口就需要添加一个mapper配置-->
+    <bean id="tuserMapper" parent="baseMapper">
+        <property name="mapperInterface" value="com.ncepu.staffhome.mapper.TuserMapper"></property>
+    </bean>
+    <bean id="tdeptMapper" parent="baseMapper">
+        <property name="mapperInterface" value="com.ncepu.staffhome.mapper.TdeptMapper"></property>
+    </bean>
+    <bean id="tpostMapper" parent="baseMapper">
+        <property name="mapperInterface" value="com.ncepu.staffhome.mapper.TpostMapper"></property>
+    </bean>
+    <bean id="tnotiMapper" parent="baseMapper">
+        <property name="mapperInterface" value="com.ncepu.staffhome.mapper.TnotiMapper"></property>
+    </bean>
+    <bean id="tdocuMapper" parent="baseMapper">
+        <property name="mapperInterface" value="com.ncepu.staffhome.mapper.TdocuMapper"></property>
+    </bean>
+    <bean id="tempMapper" parent="baseMapper">
+        <property name="mapperInterface" value="com.ncepu.staffhome.mapper.TempMapper"></property>
+    </bean>
+    <bean id="testMapper" parent="baseMapper">
+        <property name="mapperInterface" value="com.ncepu.staffhome.mapper.TestMapper"></property>
+    </bean>
+</beans>

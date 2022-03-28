@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncepu.staffhome.mapper.TdeptMapper">
+    <!--id值就是方法名-->
+    <select id="getAllDep" resultType="Department">
+        select * from department
+    </select>
+
+    <select id="getSelDep" resultType="Department">
+        select * from department where dename like "%"#{dename}"%"
+    </select>
+     <select id="getBackDep" resultType="Department">
+        select * from department where did=#{did}
+    </select>
+    <update id="updateDep" parameterType="Department">
+        update department set dename=#{dename},dedetail=#{dedetail} where did=#{did}
+    </update>
+
+    <delete id="delDep" >
+        delete from department where did=#{did}
+    </delete>
+    <insert id="addDep" parameterType="Department" useGeneratedKeys="true" keyColumn="did" keyProperty="did">
+        insert into department (dename, dedetail) values (#{dename},#{dedetail})
+    </insert>
+</mapper>

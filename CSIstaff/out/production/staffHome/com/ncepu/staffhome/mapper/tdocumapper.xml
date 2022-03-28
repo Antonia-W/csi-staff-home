@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ncepu.staffhome.mapper.TdocuMapper">
+    <!--id值就是方法名-->
+    <resultMap id="docMap" type="Document">
+        <id property="docid" column="docid"></id>
+        <result property="doname" column="doname"></result>
+        <result property="dodesc" column="dodesc"></result>
+        <result property="docretime" column="docretime"></result>
+        <association property="uname" javaType="User">
+            <id property="uname" column="uname"></id>
+            <result property="name" column="name"></result>
+        </association>
+    </resultMap>
+    <select id="getAllDoc" resultMap="docMap">
+        select d.*,u.uname,u.name from document d,user u where d.uname=null or d.uname=u.uname
+    </select>
+
+    <!--
+        <select id="getSelDoc" resultMap="docMap">
+            select d.doname,d.dodesc,d.uname,docretime,u.uname,u.name from document d,user u where d.uname=u.uname and d.doname like "%"#{doname}"%"
+        </select>
+    -->
+
+    <select id="getSelDoc" resultMap="docMap">
+        select d.doname,d.dodesc,d.docretime,u.uname,u.name from document d,user u
+        <where>
+            and d.uname = u.uname
+            <if test="doname != null and doname != ''">
+                and d.doname like "%"#{doname}"%"
+            </if>
+        </where>
+    </select>
+    <select id="getBackDoc" resultMap="docMap">
+            select d.*,u.name,u.uname from document d,user u where d.uname=u.uname and d.docid=#{docid}
+    </select>
+
+    <insert id="upload">
+        insert into document (doname,dodesc,filename,docretime,uname) values (#{doname},#{dodesc},#{filename},now(),#{uuname})
+    </insert>
+    <update id="updateDoc" parameterType="Document">
+        update document set doname=#{doname},dodesc=#{dodesc} where docid=#{docid}
+    </update>
+    <delete id="delDoc">
+    delete from document where docid=#{docid}
+    </delete>
+
+    <select id="getOne" resultType="Document">
+        select * from document where docid=#{docid}
+    </select>
+</mapper>
